@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>专业心理创伤自评系统</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/main.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<!-- 测试介绍页面 -->
+<div id="intro-page" class="page-container active">
+<div class="hero-section">
+<div class="hero-content">
+<h1 class="hero-title">专业心理创伤自评</h1>
+<p class="hero-subtitle">
+一次深度的自我探索之旅，了解您可能存在的心理创伤类型及其影响。
+本系统基于心理学专业量表，为您提供个性化的分析报告。
+</p>
+<div class="disclaimer">
+<svg class="disclaimer-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+<path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+</svg>
+<span>本测试仅为自评工具，不能替代专业心理诊断。如有严重心理困扰，请寻求专业心理健康服务。</span>
+</div>
+<div class="test-info">
+<div class="info-item">
+<svg class="info-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+</svg>
+<span>预计用时：15-20分钟</span>
+</div>
+<div class="info-item">
+<svg class="info-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+<path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+</svg>
+<span>完全匿名保密</span>
+</div>
+</div>
+<button class="cta-button" onclick="startTest()">开始评估</button>
+</div>
+</div>
+</div>
+<!-- 测试页面 -->
+<div id="test-page" class="page-container">
+<div class="test-container">
+<div class="progress-section">
+<div class="progress-bar">
+<div class="progress-fill" id="progress-fill"></div>
+</div>
+<div class="progress-text">
+<span id="current-question">1</span> / <span id="total-questions">32</span>
+</div>
+</div>
+<div class="question-card" id="question-card">
+<div class="question-header">
+<h2 class="question-title" id="question-title"></h2>
+<div class="dimension-tag" id="dimension-tag"></div>
+</div>
+<div class="question-content" id="question-content"></div>
+<div class="question-options" id="question-options"></div>
+</div>
+<div class="navigation">
+<button class="nav-button secondary" id="prev-btn" onclick="previousQuestion()" disabled>
+上一题
+</button>
+<button class="nav-button primary" id="next-btn" onclick="nextQuestion()" disabled>
+下一题
+</button>
+</div>
+</div>
+</div>
+<!-- 结果页面 -->
+<div id="result-page" class="page-container">
+<div class="result-container">
+<div class="result-header">
+<h1 class="result-title">您的创伤评估报告</h1>
+<p class="result-subtitle">基于您的回答，以下是详细的专业分析</p>
+</div>
+<div class="summary-section">
+<div class="summary-card">
+<h3>总体评估</h3>
+<div class="overall-score">
+<div class="score-number" id="overall-score">0</div>
+<div class="score-label">总体风险指数</div>
+</div>
+<div class="score-description" id="score-description"></div>
+</div>
+</div>
+<div class="chart-section">
+<h3>各维度风险分布</h3>
+<div class="chart-container">
+<canvas id="trauma-radar-chart"></canvas>
+</div>
+</div>
+<div class="details-section">
+<h3>详细分析</h3>
+<div class="details-grid" id="details-grid">
+<!-- 动态生成详细内容卡片 -->
+</div>
+</div>
+<div class="recommendations-section">
+<h3>专业建议</h3>
+<div class="recommendations-card" id="recommendations-card">
+<!-- 动态生成建议内容 -->
+</div>
+</div>
+<div class="resources-section">
+<h3>支持资源</h3>
+<div class="resources-grid">
+<div class="resource-card">
+<h4>专业心理健康服务</h4>
+<p>如果您的创伤评分较高，建议寻求专业心理咨询师的帮助</p>
+<a href="https://www.psyche.com.cn" target="_blank" rel="noopener">寻找咨询师</a>
+</div>
+<div class="resource-card">
+<h4>紧急危机干预</h4>
+<p>如有自杀倾向或严重心理危机，请立即寻求帮助</p>
+<p class="crisis-number">24小时危机热线：400-161-9995</p>
+</div>
+<div class="resource-card">
+<h4>支持群体</h4>
+<p>加入创伤康复支持小组，与有相似经历的人分享</p>
+<a href="#" onclick="alert('实际应用中可链接到相关支持群体网站')">了解更多</a>
+</div>
+</div>
+</div>
+<div class="result-actions">
+<button class="action-button primary" onclick="downloadReport()">
+下载完整报告
+</button>
+<button class="action-button secondary" onclick="restartTest()">
+重新测试
+</button>
+</div>
+</div>
+</div>
+<script src="scripts/main.js"></script>
+</body>
+</html>
