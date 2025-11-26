@@ -1,143 +1,1392 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>专业心理创伤自评系统</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles/main.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业心理创伤自评系统</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 简化的CSS样式，确保系统正常运行 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-color: #2D6A6A;
+            --primary-hover: #58A8A8;
+            --primary-light: #E1F0F0;
+            --bg-warm: #FCFBF8;
+            --bg-surface: #FFFFFF;
+            --text-primary: #333333;
+            --text-secondary: #6B7280;
+            --border-color: #E5E7EB;
+            --success-color: #28A745;
+            --warning-color: #FFC107;
+            --error-color: #DC3545;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-xxl: 64px;
+            --space-xxxl: 96px;
+            --border-radius: 12px;
+            --shadow-card: 0 4px 12px rgba(45, 106, 106, 0.08);
+            --shadow-button: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-quick: all 0.2s ease-in-out;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-warm);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 16px;
+            min-height: 100vh;
+        }
+
+        .page-container { display: none; min-height: 100vh; padding: var(--space-md); }
+        .page-container.active { display: block; }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-xxxl) var(--space-md);
+        }
+
+        .hero-content {
+            max-width: 768px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 48px;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            line-height: 1.8;
+        }
+
+        .disclaimer {
+            background-color: #FFFBEB;
+            border: 1px solid #FED7AA;
+            border-radius: var(--border-radius);
+            padding: var(--space-md);
+            margin: var(--space-xl) 0;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            text-align: left;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .test-info {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .cta-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: var(--space-md) var(--space-xl);
+            font-size: 16px;
+            font-weight: 500;
+            font-family: var(--font-heading);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-button);
+            min-width: 220px;
+            min-height: 56px;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 106, 106, 0.2);
+        }
+
+        .test-container {
+            max-width: 768px;
+            margin: 0 auto;
+            padding: var(--space-xl) 0;
+        }
+
+        .progress-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--primary-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: var(--space-sm);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .question-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-card);
+            margin-bottom: var(--space-xl);
+        }
+
+        .question-header {
+            margin-bottom: var(--space-lg);
+        }
+
+        .question-title {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .dimension-tag {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .question-content {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.6;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .option-item {
+            background-color: var(--bg-warm);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: var(--transition-quick);
+            position: relative;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-light);
+            background-color: var(--primary-light);
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .option-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            position: relative;
+            transition: var(--transition-quick);
+        }
+
+        .option-item.selected .option-radio {
+            border-color: var(--primary-color);
+        }
+
+        .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .option-item.selected .option-radio::after {
+            opacity: 1;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+        }
+
+        .nav-button {
+            padding: var(--space-md) var(--space-lg);
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-width: 120px;
+            border: 2px solid transparent;
+        }
+
+        .nav-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .nav-button.primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .nav-button.secondary {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+
+        .nav-button.secondary:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: var(--space-xxxl);
+        }
+
+        .result-title {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 36px;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .result-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .summary-section {
+            margin-bottom: var(--space-xxxl);
+        }
+
+        .summary-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+        }
+
+        .overall-score {
+            margin: var(--space-lg) 0;
+        }
+
+        .score-number {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 64px;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: var(--space-sm);
+        }
+
+        .score-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .score-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .chart-section {
+            margin-bottom: var(--space-xxxl);
+        }
+
+        .chart-section h3 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+
+        .chart-container {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-card);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #trauma-radar-chart {
+            max-height: 400px;
+        }
+
+        .details-section {
+            margin-bottom: var(--space-xxxl);
+        }
+
+        .details-section h3 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .detail-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-card);
+        }
+
+        .detail-card h4 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .score-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+        }
+
+        .score-badge {
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .score-badge.low { background-color: #D1FAE5; color: #065F46; }
+        .score-badge.medium { background-color: #FEF3C7; color: #92400E; }
+        .score-badge.high { background-color: #FEE2E2; color: #991B1B; }
+        .score-badge.severe { background-color: #FECACA; color: #7F1D1D; }
+
+        .detail-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .recommendations-section {
+            margin-bottom: var(--space-xxxl);
+        }
+
+        .recommendations-section h3 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .recommendations-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-card);
+        }
+
+        .recommendation-item {
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+
+        .recommendation-item h4 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .recommendation-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .resources-section {
+            margin-bottom: var(--space-xxxl);
+        }
+
+        .resources-section h3 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .resource-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+        }
+
+        .resource-card h4 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .resource-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: var(--space-md);
+        }
+
+        .resource-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-sm) var(--space-md);
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition-quick);
+            display: inline-block;
+        }
+
+        .resource-card a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .crisis-number {
+            font-weight: 600;
+            color: var(--error-color);
+            font-size: 16px;
+        }
+
+        .result-actions {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            padding: var(--space-md) var(--space-lg);
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-width: 180px;
+            border: 2px solid transparent;
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+
+        .action-button.secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 32px; }
+            .hero-subtitle { font-size: 16px; }
+            .test-info { flex-direction: column; gap: var(--space-md); }
+            .question-title { font-size: 20px; }
+            .result-title { font-size: 28px; }
+            .score-number { font-size: 48px; }
+            .details-grid { grid-template-columns: 1fr; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .result-actions { flex-direction: column; align-items: center; }
+            .navigation { flex-direction: column; }
+        }
+
+        @media (max-width: 480px) {
+            .page-container { padding: var(--space-sm); }
+            .hero-section { padding: var(--space-xxl) var(--space-sm); }
+            .hero-title { font-size: 28px; }
+            .question-card { padding: var(--space-md); }
+            .summary-card, .chart-container, .recommendations-card { padding: var(--space-lg); }
+        }
+    </style>
 </head>
 <body>
-<!-- 测试介绍页面 -->
-<div id="intro-page" class="page-container active">
-<div class="hero-section">
-<div class="hero-content">
-<h1 class="hero-title">专业心理创伤自评</h1>
-<p class="hero-subtitle">
-一次深度的自我探索之旅，了解您可能存在的心理创伤类型及其影响。
-本系统基于心理学专业量表，为您提供个性化的分析报告。
-</p>
-<div class="disclaimer">
-<svg class="disclaimer-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-<path d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-</svg>
-<span>本测试仅为自评工具，不能替代专业心理诊断。如有严重心理困扰，请寻求专业心理健康服务。</span>
-</div>
-<div class="test-info">
-<div class="info-item">
-<svg class="info-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-</svg>
-<span>预计用时：15-20分钟</span>
-</div>
-<div class="info-item">
-<svg class="info-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-<path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-</svg>
-<span>完全匿名保密</span>
-</div>
-</div>
-<button class="cta-button" onclick="startTest()">开始评估</button>
-</div>
-</div>
-</div>
-<!-- 测试页面 -->
-<div id="test-page" class="page-container">
-<div class="test-container">
-<div class="progress-section">
-<div class="progress-bar">
-<div class="progress-fill" id="progress-fill"></div>
-</div>
-<div class="progress-text">
-<span id="current-question">1</span> / <span id="total-questions">32</span>
-</div>
-</div>
-<div class="question-card" id="question-card">
-<div class="question-header">
-<h2 class="question-title" id="question-title"></h2>
-<div class="dimension-tag" id="dimension-tag"></div>
-</div>
-<div class="question-content" id="question-content"></div>
-<div class="question-options" id="question-options"></div>
-</div>
-<div class="navigation">
-<button class="nav-button secondary" id="prev-btn" onclick="previousQuestion()" disabled>
-上一题
-</button>
-<button class="nav-button primary" id="next-btn" onclick="nextQuestion()" disabled>
-下一题
-</button>
-</div>
-</div>
-</div>
-<!-- 结果页面 -->
-<div id="result-page" class="page-container">
-<div class="result-container">
-<div class="result-header">
-<h1 class="result-title">您的创伤评估报告</h1>
-<p class="result-subtitle">基于您的回答，以下是详细的专业分析</p>
-</div>
-<div class="summary-section">
-<div class="summary-card">
-<h3>总体评估</h3>
-<div class="overall-score">
-<div class="score-number" id="overall-score">0</div>
-<div class="score-label">总体风险指数</div>
-</div>
-<div class="score-description" id="score-description"></div>
-</div>
-</div>
-<div class="chart-section">
-<h3>各维度风险分布</h3>
-<div class="chart-container">
-<canvas id="trauma-radar-chart"></canvas>
-</div>
-</div>
-<div class="details-section">
-<h3>详细分析</h3>
-<div class="details-grid" id="details-grid">
-<!-- 动态生成详细内容卡片 -->
-</div>
-</div>
-<div class="recommendations-section">
-<h3>专业建议</h3>
-<div class="recommendations-card" id="recommendations-card">
-<!-- 动态生成建议内容 -->
-</div>
-</div>
-<div class="resources-section">
-<h3>支持资源</h3>
-<div class="resources-grid">
-<div class="resource-card">
-<h4>专业心理健康服务</h4>
-<p>如果您的创伤评分较高，建议寻求专业心理咨询师的帮助</p>
-<a href="https://www.psyche.com.cn" target="_blank" rel="noopener">寻找咨询师</a>
-</div>
-<div class="resource-card">
-<h4>紧急危机干预</h4>
-<p>如有自杀倾向或严重心理危机，请立即寻求帮助</p>
-<p class="crisis-number">24小时危机热线：400-161-9995</p>
-</div>
-<div class="resource-card">
-<h4>支持群体</h4>
-<p>加入创伤康复支持小组，与有相似经历的人分享</p>
-<a href="#" onclick="alert('实际应用中可链接到相关支持群体网站')">了解更多</a>
-</div>
-</div>
-</div>
-<div class="result-actions">
-<button class="action-button primary" onclick="downloadReport()">
-下载完整报告
-</button>
-<button class="action-button secondary" onclick="restartTest()">
-重新测试
-</button>
-</div>
-</div>
-</div>
-<script src="scripts/main.js"></script>
+    <!-- 错误提示区域 -->
+    <div id="error-message" style="display: none; position: fixed; top: 20px; right: 20px; background: #ff4444; color: white; padding: 15px; border-radius: 8px; z-index: 9999;"></div>
+
+    <!-- 测试介绍页面 -->
+    <div id="intro-page" class="page-container active">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">专业心理创伤自评</h1>
+                <p class="hero-subtitle">
+                    一次深度的自我探索之旅，了解您可能存在的心理创伤类型及其影响。
+                    本系统基于心理学专业量表，为您提供个性化的分析报告。
+                </p>
+                
+                <div class="disclaimer">
+                    <span>⚠️ 本测试仅为自评工具，不能替代专业心理诊断。如有严重心理困扰，请寻求专业心理健康服务。</span>
+                </div>
+
+                <div class="test-info">
+                    <div class="info-item">
+                        <span>⏱️ 预计用时：15-20分钟</span>
+                    </div>
+                    <div class="info-item">
+                        <span>🔒 完全匿名保密</span>
+                    </div>
+                </div>
+
+                <button class="cta-button" onclick="startTest()">开始评估</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 测试页面 -->
+    <div id="test-page" class="page-container">
+        <div class="test-container">
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="current-question">1</span> / <span id="total-questions">32</span>
+                </div>
+            </div>
+
+            <div class="question-card" id="question-card">
+                <div class="question-header">
+                    <h2 class="question-title" id="question-title"></h2>
+                    <div class="dimension-tag" id="dimension-tag"></div>
+                </div>
+                <div class="question-content" id="question-content"></div>
+                <div class="question-options" id="question-options"></div>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button secondary" id="prev-btn" onclick="previousQuestion()" disabled>
+                    上一题
+                </button>
+                <button class="nav-button primary" id="next-btn" onclick="nextQuestion()" disabled>
+                    下一题
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 结果页面 -->
+    <div id="result-page" class="page-container">
+        <div class="result-container">
+            <div class="result-header">
+                <h1 class="result-title">您的创伤评估报告</h1>
+                <p class="result-subtitle">基于您的回答，以下是详细的专业分析</p>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-card">
+                    <h3>总体评估</h3>
+                    <div class="overall-score">
+                        <div class="score-number" id="overall-score">0</div>
+                        <div class="score-label">总体风险指数</div>
+                    </div>
+                    <div class="score-description" id="score-description"></div>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <h3>各维度风险分布</h3>
+                <div class="chart-container">
+                    <canvas id="trauma-radar-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="details-section">
+                <h3>详细分析</h3>
+                <div class="details-grid" id="details-grid">
+                    <!-- 动态生成详细内容卡片 -->
+                </div>
+            </div>
+
+            <div class="recommendations-section">
+                <h3>专业建议</h3>
+                <div class="recommendations-card" id="recommendations-card">
+                    <!-- 动态生成建议内容 -->
+                </div>
+            </div>
+
+            <div class="resources-section">
+                <h3>支持资源</h3>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h4>专业心理健康服务</h4>
+                        <p>如果您的创伤评分较高，建议寻求专业心理咨询师的帮助</p>
+                        <a href="https://www.psyche.com.cn" target="_blank" rel="noopener">寻找咨询师</a>
+                    </div>
+                    <div class="resource-card">
+                        <h4>紧急危机干预</h4>
+                        <p>如有自杀倾向或严重心理危机，请立即寻求帮助</p>
+                        <p class="crisis-number">24小时危机热线：400-161-9995</p>
+                    </div>
+                    <div class="resource-card">
+                        <h4>支持群体</h4>
+                        <p>加入创伤康复支持小组，与有相似经历的人分享</p>
+                        <a href="#" onclick="alert('实际应用中可链接到相关支持群体网站')">了解更多</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="action-button primary" onclick="downloadReport()">
+                    下载完整报告
+                </button>
+                <button class="action-button secondary" onclick="restartTest()">
+                    重新测试
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let testCompleted = false;
+        let chartInstance = null;
+
+        // DOM 元素
+        const elements = {
+            introPage: document.getElementById('intro-page'),
+            testPage: document.getElementById('test-page'),
+            resultPage: document.getElementById('result-page'),
+            progressFill: document.getElementById('progress-fill'),
+            currentQuestionSpan: document.getElementById('current-question'),
+            totalQuestionsSpan: document.getElementById('total-questions'),
+            questionTitle: document.getElementById('question-title'),
+            questionContent: document.getElementById('question-content'),
+            questionOptions: document.getElementById('question-options'),
+            dimensionTag: document.getElementById('dimension-tag'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            overallScore: document.getElementById('overall-score'),
+            scoreDescription: document.getElementById('score-description'),
+            detailsGrid: document.getElementById('details-grid'),
+            recommendationsCard: document.getElementById('recommendations-card'),
+            errorMessage: document.getElementById('error-message')
+        };
+
+        // 测试数据 - 简化版本
+        const testData = {
+            dimensions: [
+                {
+                    id: 'childhood',
+                    name: '童年期创伤',
+                    description: '童年时期可能遭受的各种创伤经历',
+                    questions: [
+                        { id: 1, text: '在您的童年时期，是否经常受到身体上的惩罚或虐待？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 2, text: '您是否在童年时期遭受过性方面的侵犯或不当接触？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '发生过一次'}, {value: 2, text: '发生多次'}, {value: 3, text: '长期持续'}] },
+                        { id: 3, text: '您的童年监护人是否经常对您进行情感上的羞辱、贬损或威胁？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 4, text: '您的童年家庭是否经常充满争吵、暴力或不稳定的情况？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] }
+                    ]
+                },
+                {
+                    id: 'emotional',
+                    name: '情感创伤',
+                    description: '成人后可能遭受的情感关系创伤',
+                    questions: [
+                        { id: 5, text: '您是否曾经经历过伴侣的背叛或欺骗，让您感到深深的伤害？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '经常发生'}] },
+                        { id: 6, text: '您是否曾经被亲密的人严重伤害、羞辱或攻击？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '经常发生'}] },
+                        { id: 7, text: '您是否曾经经历过长期的情感操控或精神虐待？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '时间较短'}, {value: 2, text: '时间较长'}, {value: 3, text: '持续多年'}] },
+                        { id: 8, text: '您是否曾经被重要的人遗弃或突然失去亲密关系？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '经常发生'}] }
+                    ]
+                },
+                {
+                    id: 'interpersonal',
+                    name: '人际关系创伤',
+                    description: '社交和人际关系中的负面经历',
+                    questions: [
+                        { id: 9, text: '您是否曾经遭受过严重的校园霸凌或职场欺凌？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '长期持续'}] },
+                        { id: 10, text: '您是否曾经在社交场合经常被嘲笑、排斥或边缘化？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 11, text: '您是否曾经因为外貌、身份或背景而遭受歧视或不公平对待？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 12, text: '您是否曾经被迫处于被人际关系孤立或排挤的状态？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '长期经历'}] }
+                    ]
+                },
+                {
+                    id: 'acute',
+                    name: '急性创伤',
+                    description: '突发事件造成的创伤体验',
+                    questions: [
+                        { id: 13, text: '您是否曾经经历过严重的意外事故或灾难事件？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '经历过一次'}, {value: 2, text: '经历过多次'}, {value: 3, text: '长期影响'}] },
+                        { id: 14, text: '您是否曾经目击过严重的暴力事件或死亡场面？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '目击过一次'}, {value: 2, text: '目击过多次'}, {value: 3, text: '长期影响'}] },
+                        { id: 15, text: '您是否曾经被诊断患有严重的身体疾病或经历过生命危险？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '慢性疾病'}] },
+                        { id: 16, text: '您是否曾经经历过重大的经济损失或财务危机？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '长期困扰'}] }
+                    ]
+                },
+                {
+                    id: 'chronic',
+                    name: '慢性压力',
+                    description: '长期持续的压力和创伤状态',
+                    questions: [
+                        { id: 17, text: '您是否经历过长期的职场压力、工作虐待或失业困难？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '时间较短'}, {value: 2, text: '时间较长'}, {value: 3, text: '持续多年'}] },
+                        { id: 18, text: '您是否曾经经历过经济困境、贫困或债务压力？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '短期困难'}, {value: 2, text: '长期困难'}, {value: 3, text: '极端困难'}] },
+                        { id: 19, text: '您是否曾经需要长期照顾重病的家人或朋友？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '短期照护'}, {value: 2, text: '长期照护'}, {value: 3, text: '长期照顾'}] },
+                        { id: 20, text: '您是否曾经经历过慢性健康问题或身体疼痛？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '持续存在'}] }
+                    ]
+                },
+                {
+                    id: 'complex',
+                    name: '复合性创伤',
+                    description: '多重和复杂的创伤经历',
+                    questions: [
+                        { id: 21, text: '您是否曾经同时经历多种类型的创伤事件？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 22, text: '您是否曾经遭受过长期的人身安全威胁？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '长期威胁'}] },
+                        { id: 23, text: '您是否曾经经历过涉及多个侵害者的创伤事件？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '经常发生'}] },
+                        { id: 24, text: '您是否曾经在创伤后感到失去对生活的控制感？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] }
+                    ]
+                },
+                {
+                    id: 'vicarious',
+                    name: '次级创伤',
+                    description: '通过他人经历的创伤间接体验',
+                    questions: [
+                        { id: 25, text: '您是否曾经因为亲眼见证他人的创伤而感到痛苦？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '有过一次'}, {value: 2, text: '有过多次'}, {value: 3, text: '经常发生'}] },
+                        { id: 26, text: '您是否曾经因为需要照顾创伤受害者而感到身心疲惫？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔感到'}, {value: 2, text: '经常感到'}, {value: 3, text: '持续感到'}] },
+                        { id: 27, text: '您是否曾经因为工作或志愿活动暴露于创伤内容而受到影响？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '短期影响'}, {value: 2, text: '长期影响'}, {value: 3, text: '严重影响'}] },
+                        { id: 28, text: '您是否曾经因为他人的痛苦而感到内疚或无助？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔感到'}, {value: 2, text: '经常感到'}, {value: 3, text: '持续感到'}] }
+                    ]
+                },
+                {
+                    id: 'attachment',
+                    name: '依恋创伤',
+                    description: '早期依恋关系中的创伤体验',
+                    questions: [
+                        { id: 29, text: '您是否曾经在童年时期缺乏稳定的关爱和照顾？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔缺乏'}, {value: 2, text: '经常缺乏'}, {value: 3, text: '总是缺乏'}] },
+                        { id: 30, text: '您是否曾经经历过来自主要照顾者的情感疏离或冷漠？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 31, text: '您是否曾经感觉自己的需求经常被忽视或拒绝？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔发生'}, {value: 2, text: '经常发生'}, {value: 3, text: '总是发生'}] },
+                        { id: 32, text: '您是否曾经在童年时期经常感到不安全或焦虑？', options: [{value: 0, text: '从未有过'}, {value: 1, text: '偶尔感到'}, {value: 2, text: '经常感到'}, {value: 3, text: '总是感到'}] }
+                    ]
+                }
+            ]
+        };
+
+        // 错误处理函数
+        function showError(message) {
+            console.error('Error:', message);
+            elements.errorMessage.textContent = message;
+            elements.errorMessage.style.display = 'block';
+            setTimeout(() => {
+                elements.errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // 获取所有问题
+        function getAllQuestions() {
+            const allQuestions = [];
+            testData.dimensions.forEach(dimension => {
+                dimension.questions.forEach(question => {
+                    allQuestions.push({
+                        ...question,
+                        dimension: dimension.id,
+                        dimensionName: dimension.name,
+                        dimensionDescription: dimension.description
+                    });
+                });
+            });
+            return allQuestions;
+        }
+
+        // 初始化测试
+        function initTest() {
+            try {
+                const allQuestions = getAllQuestions();
+                elements.totalQuestionsSpan.textContent = allQuestions.length;
+                currentQuestionIndex = 0;
+                answers = {};
+                testCompleted = false;
+                console.log('Test initialized with', allQuestions.length, 'questions');
+            } catch (error) {
+                showError('初始化测试时出错：' + error.message);
+            }
+        }
+
+        // 开始测试
+        function startTest() {
+            try {
+                console.log('Starting test...');
+                initTest();
+                showPage('test');
+                displayCurrentQuestion();
+                updateProgress();
+            } catch (error) {
+                showError('开始测试时出错：' + error.message);
+            }
+        }
+
+        // 显示页面
+        function showPage(pageName) {
+            try {
+                elements.introPage.classList.remove('active');
+                elements.testPage.classList.remove('active');
+                elements.resultPage.classList.remove('active');
+                
+                if (pageName === 'intro') {
+                    elements.introPage.classList.add('active');
+                } else if (pageName === 'test') {
+                    elements.testPage.classList.add('active');
+                } else if (pageName === 'result') {
+                    elements.resultPage.classList.add('active');
+                }
+                console.log('Showing page:', pageName);
+            } catch (error) {
+                showError('切换页面时出错：' + error.message);
+            }
+        }
+
+        // 显示当前题目
+        function displayCurrentQuestion() {
+            try {
+                const allQuestions = getAllQuestions();
+                const question = allQuestions[currentQuestionIndex];
+                
+                if (!question) {
+                    console.error('No question found for index:', currentQuestionIndex);
+                    return;
+                }
+                
+                console.log('Displaying question:', question.id, question.text);
+                
+                // 更新题目内容
+                elements.questionTitle.textContent = `题目 ${currentQuestionIndex + 1}`;
+                elements.questionContent.textContent = question.text;
+                elements.dimensionTag.textContent = question.dimensionName;
+                
+                // 清空并创建选项
+                elements.questionOptions.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option-item';
+                    
+                    if (answers[question.id] === option.value) {
+                        optionDiv.classList.add('selected');
+                    }
+                    
+                    optionDiv.innerHTML = `
+                        <input type="radio" name="question_${question.id}" value="${option.value}" 
+                               ${answers[question.id] === option.value ? 'checked' : ''}>
+                        <label class="option-label">
+                            <span class="option-radio"></span>
+                            ${option.text}
+                        </label>
+                    `;
+                    
+                    optionDiv.addEventListener('click', () => {
+                        selectOption(question.id, option.value);
+                    });
+                    
+                    elements.questionOptions.appendChild(optionDiv);
+                });
+                
+                updateNavigationButtons();
+            } catch (error) {
+                showError('显示题目时出错：' + error.message);
+            }
+        }
+
+        // 选择选项
+        function selectOption(questionId, value) {
+            try {
+                console.log('Selecting option:', questionId, value);
+                answers[questionId] = value;
+                
+                // 更新UI
+                const optionDivs = elements.questionOptions.querySelectorAll('.option-item');
+                optionDivs.forEach(div => div.classList.remove('selected'));
+                
+                const selectedDiv = Array.from(optionDivs).find(div => {
+                    const input = div.querySelector('input[type="radio"]');
+                    return input && parseInt(input.value) === value;
+                });
+                
+                if (selectedDiv) {
+                    selectedDiv.classList.add('selected');
+                }
+                
+                updateNavigationButtons();
+            } catch (error) {
+                showError('选择选项时出错：' + error.message);
+            }
+        }
+
+        // 更新导航按钮
+        function updateNavigationButtons() {
+            const allQuestions = getAllQuestions();
+            
+            // 更新前一题按钮
+            elements.prevBtn.disabled = currentQuestionIndex === 0;
+            
+            // 更新下一题按钮
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            const hasAnswer = currentQuestion && answers[currentQuestion.id] !== undefined;
+            
+            if (currentQuestionIndex === allQuestions.length - 1) {
+                elements.nextBtn.textContent = '查看结果';
+                elements.nextBtn.disabled = !hasAnswer;
+            } else {
+                elements.nextBtn.textContent = '下一题';
+                elements.nextBtn.disabled = !hasAnswer;
+            }
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const allQuestions = getAllQuestions();
+            const progress = ((currentQuestionIndex) / allQuestions.length) * 100;
+            elements.progressFill.style.width = progress + '%';
+            elements.currentQuestionSpan.textContent = currentQuestionIndex + 1;
+        }
+
+        // 上一题
+        function previousQuestion() {
+            try {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    displayCurrentQuestion();
+                    updateProgress();
+                }
+            } catch (error) {
+                showError('上一题时出错：' + error.message);
+            }
+        }
+
+        // 下一题
+        function nextQuestion() {
+            try {
+                const allQuestions = getAllQuestions();
+                
+                if (currentQuestionIndex === allQuestions.length - 1) {
+                    // 显示结果
+                    showResults();
+                } else {
+                    currentQuestionIndex++;
+                    displayCurrentQuestion();
+                    updateProgress();
+                }
+            } catch (error) {
+                showError('下一题时出错：' + error.message);
+            }
+        }
+
+        // 显示结果
+        function showResults() {
+            try {
+                console.log('Showing results...');
+                testCompleted = true;
+                showPage('result');
+                generateResults();
+            } catch (error) {
+                showError('显示结果时出错：' + error.message);
+            }
+        }
+
+        // 生成结果
+        function generateResults() {
+            try {
+                // 计算各维度得分
+                const dimensionScores = {};
+                testData.dimensions.forEach(dimension => {
+                    const dimensionAnswers = dimension.questions.map(q => answers[q.id] || 0);
+                    const avgScore = dimensionAnswers.reduce((sum, score) => sum + score, 0) / dimensionAnswers.length;
+                    dimensionScores[dimension.id] = avgScore;
+                });
+                
+                // 计算总体得分
+                const overallScore = Math.round(
+                    Object.values(dimensionScores).reduce((sum, score) => sum + score, 0) / testData.dimensions.length * 20
+                );
+                
+                // 更新总体评估
+                elements.overallScore.textContent = overallScore;
+                elements.scoreDescription.textContent = getOverallDescription(overallScore);
+                
+                // 生成雷达图
+                generateRadarChart(dimensionScores);
+                
+                // 生成详细分析
+                generateDetails(dimensionScores);
+                
+                // 生成建议
+                generateRecommendations(dimensionScores);
+                
+                console.log('Results generated successfully');
+            } catch (error) {
+                showError('生成结果时出错：' + error.message);
+            }
+        }
+
+        // 总体描述
+        function getOverallDescription(score) {
+            if (score < 25) return '您的创伤风险指数较低，表明您在大多数方面具有良好的心理韧性。';
+            if (score < 50) return '您的创伤风险指数中等，建议关注可能存在的心理创伤并考虑专业指导。';
+            if (score < 75) return '您的创伤风险指数较高，建议寻求专业心理健康服务进行深入评估。';
+            return '您的创伤风险指数很高，强烈建议尽快寻求专业心理帮助和支持。';
+        }
+
+        // 获取风险等级
+        function getRiskLevel(score) {
+            if (score < 25) return { level: 'low', label: '低风险', color: '#28A745' };
+            if (score < 50) return { level: 'medium', label: '中风险', color: '#FFC107' };
+            if (score < 75) return { level: 'high', label: '高风险', color: '#DC3545' };
+            return { level: 'severe', label: '严重风险', color: '#8B0000' };
+        }
+
+        // 生成雷达图
+        function generateRadarChart(dimensionScores) {
+            try {
+                const canvas = document.getElementById('trauma-radar-chart');
+                if (!canvas) {
+                    console.error('Chart canvas not found');
+                    return;
+                }
+                
+                // 销毁现有图表实例
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+                
+                const ctx = canvas.getContext('2d');
+                const labels = testData.dimensions.map(d => d.name);
+                const data = testData.dimensions.map(d => Math.round((dimensionScores[d.id] || 0) / 3 * 100));
+                
+                chartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '创伤风险指数 (%)',
+                            data: data,
+                            backgroundColor: 'rgba(45, 106, 106, 0.1)',
+                            borderColor: '#2D6A6A',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#2D6A6A',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#2D6A6A'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { stepSize: 20 }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: true }
+                        }
+                    }
+                });
+                
+                console.log('Radar chart generated successfully');
+            } catch (error) {
+                console.error('Error generating radar chart:', error);
+                showError('生成图表时出错：' + error.message);
+            }
+        }
+
+        // 生成详细分析
+        function generateDetails(dimensionScores) {
+            try {
+                elements.detailsGrid.innerHTML = '';
+                
+                testData.dimensions.forEach(dimension => {
+                    const score = Math.round((dimensionScores[dimension.id] || 0) / 3 * 100);
+                    const riskLevel = getRiskLevel(score);
+                    
+                    const detailCard = document.createElement('div');
+                    detailCard.className = 'detail-card';
+                    
+                    detailCard.innerHTML = `
+                        <h4>${dimension.name}</h4>
+                        <div class="score-indicator">
+                            <span class="score-badge ${riskLevel.level}">${riskLevel.label}</span>
+                            <span>${score}%</span>
+                        </div>
+                        <p>${getDimensionDescription(dimension.id, score)}</p>
+                    `;
+                    
+                    elements.detailsGrid.appendChild(detailCard);
+                });
+                
+                console.log('Details generated successfully');
+            } catch (error) {
+                console.error('Error generating details:', error);
+                showError('生成详细分析时出错：' + error.message);
+            }
+        }
+
+        // 维度描述
+        function getDimensionDescription(dimensionId, score) {
+            const descriptions = {
+                'childhood': score < 25 ? '童年期创伤相对较少，可能具有良好的早期依恋关系。' : '可能存在童年期创伤经历，建议关注其对当前生活的影响。',
+                'emotional': score < 25 ? '情感关系相对稳定，未经历重大情感创伤。' : '可能存在情感创伤，需要关注人际关系的修复。',
+                'interpersonal': score < 25 ? '人际关系良好，未经历严重的社交创伤。' : '可能存在人际关系创伤，建议加强社交支持。',
+                'acute': score < 25 ? '未经历严重的急性创伤事件。' : '可能经历急性创伤事件，需要关注创伤后恢复。',
+                'chronic': score < 25 ? '慢性压力水平较低，生活状态相对稳定。' : '可能存在长期慢性压力，建议寻求压力管理支持。',
+                'complex': score < 25 ? '创伤经历相对单一，未经历复杂的创伤模式。' : '可能经历复合性创伤，需要综合性的专业支持。',
+                'vicarious': score < 25 ? '较少受到次级创伤影响。' : '可能因接触他人创伤而受到影响，建议建立健康界限。',
+                'attachment': score < 25 ? '依恋关系相对健康，早期关爱充足。' : '可能存在依恋创伤，建议寻求专业支持进行修复。'
+            };
+            return descriptions[dimensionId] || '需要专业评估确定具体影响。';
+        }
+
+        // 生成建议
+        function generateRecommendations(dimensionScores) {
+            try {
+                const highRiskDimensions = Object.entries(dimensionScores)
+                    .filter(([id, score]) => (score / 3 * 100) >= 50)
+                    .map(([id]) => id);
+                
+                let recommendations = '';
+                
+                if (highRiskDimensions.length === 0) {
+                    recommendations = `
+                        <div class="recommendation-item">
+                            <h4>维持心理健康</h4>
+                            <p>继续维护良好的生活习惯，保持社交联系，培养健康的应对机制。</p>
+                        </div>
+                    `;
+                } else {
+                    recommendations = `
+                        <div class="recommendation-item">
+                            <h4>寻求专业支持</h4>
+                            <p>建议寻找专业的心理咨询师进行进一步的评估和支持，特别是针对${highRiskDimensions.length}个高风险维度的创伤。</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>建立支持系统</h4>
+                            <p>与家人朋友分享您的感受，寻求理解和支持，参加相关的支持小组。</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>自我关爱实践</h4>
+                            <p>练习正念冥想、定期运动、保持充足睡眠，培养健康的应对技巧。</p>
+                        </div>
+                    `;
+                }
+                
+                elements.recommendationsCard.innerHTML = recommendations;
+                console.log('Recommendations generated successfully');
+            } catch (error) {
+                console.error('Error generating recommendations:', error);
+                showError('生成建议时出错：' + error.message);
+            }
+        }
+
+        // 下载报告
+        function downloadReport() {
+            try {
+                const reportData = {
+                    timestamp: new Date().toISOString(),
+                    answers: answers,
+                    completed: testCompleted
+                };
+                
+                const dataBlob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `心理创伤评估报告_${new Date().toISOString().slice(0, 10)}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                alert('报告已下载为JSON文件。如需更详细的分析报告，建议咨询专业心理健康服务机构。');
+            } catch (error) {
+                showError('下载报告时出错：' + error.message);
+            }
+        }
+
+        // 重新开始测试
+        function restartTest() {
+            try {
+                console.log('Restarting test...');
+                initTest();
+                showPage('intro');
+            } catch (error) {
+                showError('重新开始时出错：' + error.message);
+            }
+        }
+
+        // 键盘导航
+        document.addEventListener('keydown', function(e) {
+            if (elements.testPage.classList.contains('active')) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    if (!elements.nextBtn.disabled) nextQuestion();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (!elements.prevBtn.disabled) previousQuestion();
+                }
+            }
+        });
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                console.log('DOM loaded, initializing application...');
+                initTest();
+                console.log('Application initialized successfully');
+            } catch (error) {
+                showError('初始化应用时出错：' + error.message);
+            }
+        });
+
+        // Chart.js加载检查
+        window.addEventListener('load', function() {
+            if (typeof Chart === 'undefined') {
+                showError('图表库加载失败，雷达图功能可能不可用');
+            }
+        });
+    </script>
 </body>
 </html>
